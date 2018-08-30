@@ -4,34 +4,174 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title>Simple Chat</title>
+	<title>mtPulse</title>
 	<meta name="description" content="Simple Chat Room">
 	<meta name="author" content="Tomomi Imura  @girlie_mac">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href='https://fonts.googleapis.com/css?family=Gorditas:700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Gorditas:700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 	<header>
-		<h1>Super Simple Chat</h1>
+    <h1>
+      <a href="#"> <img src="mtPulse.PNG" width="40" height="40"/></a> 
+      mtPulse
+      <span id="presence" style="color:red; font-size:0.5em">0</span>
+    </h1>
 	</header>
 
 	<section id="main" role="main">
 		<div id="chat">
-			<i id="avatar" class="face12"></i><input type="text" id="input" placeholder="Type your message...">
-		</div>
-		<button id="button">Send Message</button>
- 		
-		<p id="presence"></p>
-		<div id="output"></div>
-	</section>
-
+	    
+      <i id="avatar" class="face12" style="display:none"></i>  
+      
+      
+      <div class="dropdown"  style="display:inline-block;vertical-align:top;" > 
+        <a href="#" style="display:inline-block;vertical-align:sub;" onclick="myFunction()">
+          <img src="media/menu-3.png" style="width:30px; height:30px" alt="Play">
+        </a>
+        <div id="myDropdown" style="position: absolute;
+                                    background-color: lightblue;
+                                    left:0px;top:70px;
+                                    min-width: 160px;width: 280px;
+                                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);z-index: 1;">
+            <a href="#" onclick="openForm()" >Add Diet Entry</a><br>
+            <a href="#" onclick="openForm()" >Diet Plan 2 (8/8/18)</a><br>
+            <a href="#" onclick="openForm()" >Diet Plan 1 (2/8/18)</a>     
+        </div>
+		  </div>
+      
+      <input type="text" style="display:inline-block; vertical-align:super;height:30px" 
+             id="input" placeholder="Type your message..." />
+      
+      <a id="button" href="#" style="display:inline-block;vertical-align:top;" >
+          <img src="media/play-button-1.png" style="width:30px; height:30px" alt="Play">
+       </a>
+    
+    </div>
+		
+    <div id="output"  style="background-color:white; height:400px; overflow-y:scroll; " ></div>
+	
+    <div id="form" style="position:absolute; top:0; left:0; width:100%; height:100%; 
+                          background-color:darkGrey; display:none;
+                          padding:5em;">
+        <a href="#" onclick="openForm()" >Close</a><br>
+    </div>
+  
+  </section>
+  
 	<footer></footer>
 
 
-	<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
+	<script src="http://cdn.pubnub.com/pubnub.min.js"></script>
 	<script src="js/app.js"></script>
+  <script type="text/JavaScript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?ver=1.4.2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.2.0/json2html.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.json2html/1.2.0/jquery.json2html.min.js"></script>
+
+  
+  <script>
+    
+    
+    
+    
+    /* BZMenu ---------------------  When the user clicks on the button, 
+    toggle between hiding and showing the dropdown content */
+    myFunction();
+    function myFunction() {
+      //alert($("#myDropdown").css('display'))
+      if ( $("#myDropdown").css('display') == 'block')
+        $("#myDropdown").css('display','none');
+      else
+        $("#myDropdown").css('display','block');
+    }
+    
+    function openForm() {      
+      //Close function bar
+       $("#myDropdown").css('display','none');
+     
+      //open popup
+      if ( $("#form").css('display') == 'block')
+        $("#form").css('display','none');
+      else
+        {     
+          //Build Json2HTML from data and template & write it to form
+          var tt = [
+                {"<>":"style","html":"\n  .entryBox {\n    rows:3;\n    width:100%;\n    height:60px;\n  }\n  \n  .entryBtn {\n    width:80px;\n    height:40px;\n    display:inline;\n  }\n  \n  #dForm {\n    z:index:100;\n  }\n"},
+                {"<>":"form","id":"dForm","html":[
+                    {'<>':"div","html":"${title}"},
+                    {"<>":"input","id":"txtDate","name":"txtDate","type":"date","placeholder":"Enter Date","html":""},
+                    {"<>":"textarea","id":"txtBreakfast", "name":"txtBreakfast","class":"entryBox","placeholder":"Enter what you ate for breakfast today","html":""},
+                    {"<>":"textarea","id":"txtLunch", "name":"txtLunch","class":"entryBox","placeholder":"Enter what you ate for lunch today","html":""},
+                    {"<>":"textarea","id":"txtSnacks", "name":"txtSnacks","class":"entryBox","placeholder":"Enter what you ate for snacks today","html":""},
+                    {"<>":"textarea","id":"txtBreakfast", "name":"txtBreakfast","class":"entryBox","placeholder":"Enter what you ate for dinner today","html":""},
+                    {"<>":"input","id":"txtMovements", "name":"txtMovements","style":"display:inline-block; width:120px","type":"number","min":"0","max":"20","placeholder":"Bowel Movements","html":""},
+                    {"<>":"span","id":"spnEmpty", "html":" "},
+                    {"<>":"input","id":"txtSleep","name":"txtSleep","style":"display:inline-block; width:120px","type":"number","min":"0","max":"20","placeholder":"Sleep hrs","html":""},
+                    {"<>":"br","html":""},
+                    {"<>":"button","id":"btnSave","class":"entryBtn", "html":"Save"},
+                    {"<>":"span","id":"spnEmpty", "html":" "},
+                    {"<>":"button","id":"btnClose","class":"entryBtn","html":"Close"}
+                  ]}
+               ]
+        
+          //Transform 
+          var d = [{'title':'Diet Entry'}];
+          $("#form").html(json2html.transform(d,tt));
+          
+          //Wire events
+          $("#btnSave").click(function() {  
+            console.log( $("#dForm").serializeArray() ) ;
+            openForm();  
+          }); 
+          
+          $("#btnClose").click(function() {  openForm();  }); 
+         
+          //Make form visible
+          $("#form").css('display','block');
+    
+        }
+    }
+    
+   function toJSONString( form ) {
+		var obj = {};
+		var elements = form.querySelectorAll( "input, select, textarea" );
+		for( var i = 0; i < elements.length; ++i ) {
+			var element = elements[i];
+			var name = element.name;
+			var value = element.value;
+
+			if( name ) {
+				obj[ name ] = value;
+			}
+		}
+
+		return JSON.stringify( obj );
+	}
+
+   (function ($) {
+    $.fn.serializeFormJSON = function () {
+
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+})(jQuery);
+
+
+  </script>
+  
 	
 </body>
 </html>
