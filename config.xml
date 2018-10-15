@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.arcken.mtPulse" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>mtPulse</name>
+    <name>oKtavity</name>
     <description>
-        
+        Activity Enterprise
     </description>
-    <author email="info@arcken.com" href="http://mtPulse.arcken.com">
+    <author email="info@arcken.com" href="http://oktavity.arcken.com">
         Arcken DevTeam
     </author>
     <content src="index.html" />
