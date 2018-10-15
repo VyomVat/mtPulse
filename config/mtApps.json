@@ -1,0 +1,27 @@
+{
+  "apps": [{
+    "name": "DT",
+    "id": "1",
+    "screens": [{
+      "name": "diet entry",
+      "id": "0",
+      "template": "dte.json",
+      "mode":"0"
+    }, {
+      "name": "diet plan",
+      "id": "2",
+      "template": "dtp.json",
+      "mode":"0"
+    }, {
+      "name": "diet entry list",
+      "id": "3",
+      "template": "dtel.json",
+      "mode":"0"
+    }, {
+      "name": "diet plan list",
+      "id": "4",
+      "template": "dtep.json",
+      "mode":"0"
+    }]
+  }]
+}
