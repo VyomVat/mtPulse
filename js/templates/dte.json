@@ -1,0 +1,26 @@
+
+{ 
+  "template": [
+                {"<>":"style","html":"\n  .entryBox {\n    rows:3;\n    width:100%;\n    height:60px;\n  }\n  \n  .entryBtn {\n    width:80px;\n    height:40px;\n    display:inline;\n  }\n  \n  #dForm {\n    z:index:100;\n  }\n"},
+                {"<>":"form","id":"dForm","html":[
+                    {"<>":"input","id":"txtTitle","name":"txtTitle","type":"text","readonly":"1","value":"${txtTitle}"},
+                    {"<>":"input","id":"txtDate","name":"txtDate","type":"date","placeholder":"Enter Date","value":"${txtDate}"},
+                    {"<>":"textarea","id":"txtBreakfast", "name":"txtBreakfast","class":"entryBox","placeholder":"Enter what you ate for breakfast today","html":"${txtBreakfast}"},
+                    {"<>":"textarea","id":"txtLunch", "name":"txtLunch","class":"entryBox","placeholder":"Enter what you ate for lunch today","html":"${txtLunch}"},
+                    {"<>":"textarea","id":"txtSnacks", "name":"txtSnacks","class":"entryBox","placeholder":"Enter what you ate for snacks today","html":"${txtSnacks}"},
+                    {"<>":"textarea","id":"txtDinner", "name":"txtDinner","class":"entryBox","placeholder":"Enter what you ate for dinner today","html":"${txtDinner}"},
+                    {"<>":"input","id":"txtMovements", "name":"txtMovements","style":"display:inline-block; width:120px","type":"number","min":"0","max":"20","placeholder":"Bowel Movements","value":"${txtMovements}"},
+                    {"<>":"span","id":"spnEmpty", "html":" "},
+                    {"<>":"input","id":"txtSleep","name":"txtSleep","style":"display:inline-block; width:120px","type":"number","min":"0","max":"20","placeholder":"Sleep hrs","value":"${txtSleep}"},
+                    {"<>":"br","html":""},
+                    {"<>":"button","type":"button","id":"btnSave","class":"entryBtn", "html":"Save"},
+                    {"<>":"span","id":"spnEmpty", "html":" "},
+                    {"<>":"button","type":"button","id":"btnClose","class":"entryBtn","html":"Close"},
+                    {"<>":"input","id":"appid","name":"appid","type":"hidden","value":"1"},
+                    {"<>":"input","id":"templateid","name":"templateid","type":"hidden","value":"1"}
+                  ]}
+               ],
+  "defaults": [
+                {"txtTitle":"Diet Entry", "txtMovements":0} 
+              ] 
+}

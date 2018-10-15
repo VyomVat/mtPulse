@@ -1,0 +1,19 @@
+{ 
+  "template":
+               [
+                {"<>":"style","html":"\n  .entryBox {\n    rows:3;\n    width:100%;\n    height:60px;\n  }\n  \n  .entryBtn {\n    width:80px;\n    height:40px;\n    display:inline;\n  }\n  \n  #dForm {\n    z:index:100;\n  }\n"},
+                {"<>":"form","id":"dForm","html":[
+                    {"<>":"input","id":"txtTitle","name":"txtTitle","type":"text","readonly":"1","value":"${txtTitle}", "style":"background-color:darkGrey" },
+                    {"<>":"input","id":"txtUserid","name":"txtUserid","type":"text","placeholder":"Enter email","value":""},
+                    {"<>":"input","id":"txtPassword","name":"txtPassword","type":"password","placeholder":"Enter password","value":""},                 
+                    {"<>":"br","html":""},
+                    {"<>":"button","type":"button","id":"btnSave","class":"entryBtn", "html":"Log In"},
+                    {"<>":"span","id":"spnEmpty", "html":" "},
+                    {"<>":"button","type":"button","id":"btnClose","class":"entryBtn","html":"Cancel"}
+                  ]}
+               ],
+  "defaults": [
+                {"txtTitle":"Log In", "txtLogin":"", "txtPassword":""}
+              ]  
+ 
+}

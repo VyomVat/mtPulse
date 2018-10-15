@@ -1,3 +1,4 @@
+
 (function() {
 
     var output = PUBNUB.$('output'), 
@@ -22,9 +23,17 @@
 
     p.subscribe({
         channel  : channel,
-        callback : function(m) {
-            output.innerHTML = '<p><i class="' + m.avatar + '"></i><span>' +  m.text.replace( /[<>]/ig, '' ) + '</span></p>' + output.innerHTML; 
-        },
+        callback : displayMsg,
+//         callback : function(m) {
+//            console.log(m);
+//            if (m.type == 1 ) {
+//             output.innerHTML = '<p><u><span>' +
+//               m.text.replace( /[<>]/ig, '' ) + '</u></span></p>' + output.innerHTML;  
+//            }
+//            else {
+//             output.innerHTML = '<p><i class="' + m.avatar + '"></i><span>' +  m.text.replace( /[<>]/ig, '' ) + '</span></p>' + output.innerHTML; 
+//           }
+//         },
         presence: function(m){
             presence.textContent = m.occupancy + ' user(s)';
         }
@@ -35,7 +44,8 @@
     });
 
     p.bind('click', button, publish);
-
+  
+   
     function publish() {
         p.publish({
             channel : channel, 
@@ -44,5 +54,9 @@
         });
     }
   
-
+    function displayMsg(m) {
+        output.innerHTML = "msg" + output.innerHTML; 
+    }
+  
 })();
+
