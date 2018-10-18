@@ -5,7 +5,7 @@ html {
 }
 body {
     padding: 0;
-    margin: 0;
+    margin: 1;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Roboto Light", "Segoe UI Web Light", "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", Helvetica, Arial, sans-serif; 
     background: #f9f9f9;
     color: #333;
@@ -26,7 +26,7 @@ h1 {
     text-align: center;
     font-weight: normal;
 }
-input[type=text], button {
+input[type=text], input[type=password], button {
     -webkit-appearance: none;
     -moz-appearance: none;
     border: 1px solid #ddd;
@@ -45,16 +45,17 @@ button {
 /*     width: 100%; */
 }
 
-
 #chat {
     height: 35px;
     position: relative;
 }
+
 #chat i {
     font-size: 75px;
     position: absolute;
 
 }
+
 #chat input {
     margin-left: 0px;
     position: relative;
@@ -63,6 +64,7 @@ button {
 
 #main {
     margin:1;
+    left:1px;
 }
 #main > p {
     color: #ce1126;

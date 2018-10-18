@@ -20,40 +20,10 @@ Places where forms are opened are
 	Modes available are :
 		2, 9
 			param json can be left null, data should have all the ncessary values
-      
-      
 
 */
 
 
-
-function getTemplate(req) {
-  
-  //Check if template exists in cache
-  if(localStorage.getItem(req.templateid)) {
-      data = JSON.parse(localStorage.getItem(req.templateid));
-      return data
-  } 
-  else {
-      // Make ajax call, fetch object and store in localStorage in the success or done callbacks as described above
-      $.ajax({
-          url: 'http://buzingle.web44.net/oktavity/service/template.php',
-          dataType: 'json',
-          type: 'post',
-          contentType: 'application/x-www-form-urlencoded',
-          data:  { req:JSON.stringify(req) },
-          success: function( data, textStatus, jQxhr ) {
-              localStorage.setItem("req.templateid", JSON.stringify(res));
-              console.log( data );
-              return data;
-          },
-          error: function( jqXhr, textStatus, errorThrown ) {
-              console.log( errorThrown );
-          }
-      });
-    }
-  
-}
 
 function displayForm(input,data) {
   
@@ -64,17 +34,45 @@ function displayForm(input,data) {
   request.request.mode = param.mode;
   request.request.id = param.id;
   console.log(request)
-  
+  var temp;
   
   //Get template
-  var temp =  getTemplate(request);
-  console.log(temp)
+  //var temp =  getTemplate(request);
+  //Check if template exists in cache
+  if(localStorage.getItem(param.templateid)) {
+      temp = JSON.parse(localStorage.getItem(param.templateid));
+      setFormData(temp,data);
+  } 
+  else {
+      // Make ajax call, fetch object and store in localStorage in the success or done callbacks as described above
+      $.ajax({
+          url: 'http://buzingle.web44.net/oktavity/service/template.php',
+          dataType: 'json',
+          type: 'post',
+          contentType: 'application/x-www-form-urlencoded',
+          data:  { req:JSON.stringify(request) },
+          success: function( temp, textStatus, jQxhr ) {
+              localStorage.setItem(param.templateid, JSON.stringify(temp));
+              console.log( temp );
+              setFormData(temp,data);
+          },
+          error: function( jqXhr, textStatus, errorThrown ) {
+              console.log( errorThrown );
+          }
+      });
+    }
+  
+}
+
+function setFormData(temp, data) {
+  
   
   //Use passed data or template defaults to create transform
   if (data == null) {
     //Insert Mode
-     if (param.id == null || param.id === 0) { 
+     if (request.request.id == null || request.request.id === 0 || request.request.id === undefined) { 
        data = temp.defaults;
+       renderForm(temp,data)
      }
     //Retrieval from db
     else {
@@ -85,7 +83,8 @@ function displayForm(input,data) {
         contentType: 'application/x-www-form-urlencoded',
         data:  { req:JSON.stringify(request) },
         success: function( d, textStatus, jQxhr ){
-            data = d.page;
+            data = d[0].tranPage;
+            renderForm(temp,data)
             console.log( d );
         },
         error: function( jqXhr, textStatus, errorThrown ){
@@ -94,8 +93,17 @@ function displayForm(input,data) {
       });
     }
   }
+  else {
+    renderForm(temp,data);
+  }
     
+  
+}
+
+function renderForm(temp,data) {
+  
   //Build form html from template and data
+ 
   $("#form").html(json2html.transform(data,temp.template));
                   
   //Wire save events
@@ -130,6 +138,10 @@ function displayForm(input,data) {
   $("#btnClose").click(function() {  $("#form").css('display','none');  }); 
 
   //Make form visible
-  $("#form").css('display','block');                
+  $("#form").css('display','block'); 
   
+  //Close function bar
+  $("#myDropdown").css('display','none');
+     
+ 
 }

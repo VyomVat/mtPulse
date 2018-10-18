@@ -35,8 +35,8 @@
         </a>
         <div id="myDropdown" style="position: absolute;
                                     background-color: lightblue;
-                                    left:0px;top:70px;
-                                    overflow:scroll;
+                                    left:0px;top:35px;
+                                    overflow:auto;
                                     min-width: 160px;width: 280px;
                                     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);z-index: 1;">
             <a href="#" onclick="openForm()" >Add Diet Entry</a><br>
@@ -81,8 +81,7 @@
     var request = JSON.parse('{"request":{"mode":"0","id":"0","userid":"","password":"","token":"","appid":"","templateid":"","filter":[],"data":[{"page":[],"type":"1"}]}}');
     //console.log(request);
     
-    /* BZMenu ---------------------  When the user clicks on the button, 
-    toggle between hiding and showing the dropdown content */
+    //toggle between hiding and showing the dropdown content */
     myFunction();
     
     function myFunction() {
@@ -132,6 +131,8 @@
                               {"<>":"br","html":""},
                               {"<>":"button","type":"button","id":"btnSave","class":"entryBtn", "html":"Log In"},
                               {"<>":"span","id":"spnEmpty", "html":" "},
+                              {"<>":"button","type":"button","id":"btnRegister","class":"entryBtn", "html":"Register"},
+                              {"<>":"span","id":"spnEmpty", "html":" "},
                               {"<>":"button","type":"button","id":"btnClose","class":"entryBtn","html":"Cancel"}
                             ]}
                          ],
@@ -142,15 +143,7 @@
           }
             
           $("#form").html(json2html.transform(loginTemplate.defaults,loginTemplate.template));
-          
-                
-//           readTextFile("js/templates/login.json", function(text){
-//               console.log(text);
-//               var loginTemplate = JSON.parse(text);
-//               $("#form").html(json2html.transform(loginTemplate.defaults,loginTemplate.template));
-//           });
-
-          
+                   
           //Wire events
           $("#btnSave").click(function() {  
             
@@ -194,6 +187,49 @@
           }); 
           
           $("#btnClose").click(function() {  $("#form").css('display','none');  }); 
+          
+          //Wire events
+          $("#btnRegister").click(function() {  
+            
+            //publishForm( "Log In", formObj.length - 1, JSON.stringify(j2j($("#dForm").serializeArray())) );
+            
+            //Call php service to save record
+            request.request.userid = $("#txtUserid").val();
+            request.request.password = $("#txtPassword").val();
+            request.request.mode = "1";
+            
+            $.ajax({
+                url: 'http://kavach.gearhostpreview.com/login.php',
+                dataType: 'json',
+                type: 'post',
+                contentType: 'application/x-www-form-urlencoded',
+                data:  { req:JSON.stringify(request) },
+                success: function( data, textStatus, jQxhr ){
+                    console.log( data);
+                    if (parseInt(data[0].id) > 0) {
+                      $("#mtMenu").show();
+                      $("#mtLogin").hide();
+                      buildIconBar("myDropdown",data[0].profile)
+                      displayStatus("Registered");
+                    }
+                    else {
+                      $("#mtMenu").hide();
+                      $("#mtLogin").show();  
+                      displayStatus("Error registering")
+                    }
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( errorThrown );
+                    $("#mtMenu").hide();
+                    $("#mtLogin").show();
+                    displayStatus("Error Logging In")
+                }
+            });
+
+            //e.preventDefault();
+            $("#form").css('display','none');
+           
+          }); 
          
           //Make form visible
           $("#form").css('display','block');
@@ -203,28 +239,33 @@
     
     function buildIconBar(div, data) {
             
-            var profile = JSON.parse(data)
-            var html = "";
-            var json = "";
-            for (i = 0; i < profile.apps.length; i++) {
-                 html=html+"<div id="+profile.apps[i].name+">"+profile.apps[i].name+"<br>";
-                    for (j = 0; j < profile.apps[i].screens.length; j++) {
-                        json = "{\"appid\":\""+profile.apps[i].id+"\",\"templateid\":\""
-                                + profile.apps[i].screens[j].template+"\",\"mode\":\""
-                                +"0"+"\"}"
-                        //console.log(json);
-                        html = html +"<a href='#' style='display:inline-block;vertical-align:sub;' onclick=openForm(this.dataset.j) "
-                        //html = html +"<a href='#' style='display:inline-block;vertical-align:sub;' onclick=displayForm(this.dataset.j) "
-                                    + "data-j="+ json.replace(/\"/g,'&quot;')  + " >"
-                                    +" <img src=media/"+ profile.apps[i].screens[j].image 
-                                    + " style='width:30px; height:30px' alt=Log>"
-                                    + "</a>";
-                    }
-                html = html +"</div>";
-            }
-            
-            $("#"+div).html(html);
-    
+          var profile = JSON.parse(data)
+          var html = "";
+          var json = "";
+          for (i = 0; i < profile.apps.length; i++) {
+               html=html+"<div id="+profile.apps[i].name+" style=\"background-color:red; color:white; padding:8px; border-style:solid; border-width:1px; border-color:white;\"  >"
+                        +"<label style=\"display:inline-block; width:80px; \">"
+                        +profile.apps[i].name+"</label>";
+                  for (j = 0; j < profile.apps[i].screens.length; j++) {
+                      json = "{\"appid\":\""+profile.apps[i].id+"\",\"templateid\":\""
+                              + profile.apps[i].screens[j].template+"\",\"mode\":\""
+                              +"0"
+                              //+"\",\"id\":\""+"2"
+                              +"\"}"
+                      //console.log(json);
+                      //html = html +"<a href='#' style='display:inline-block;vertical-align:sub;' onclick=openForm(this.dataset.j) "
+                      html = html +"<a href='#' style='display:inline-block;vertical-align:sub; padding-left:3px; ' "
+                                  +"onclick=displayForm(this.dataset.j) "
+                                  + "data-j="+ json.replace(/\"/g,'&quot;')  + " >"
+                                  +" <img src=media/"+ profile.apps[i].screens[j].image 
+                                  + " style='width:30px; height:30px' alt=Log>"
+                                  + "</a>";
+                  }
+              html = html +"</div>";
+          }
+
+          $("#"+div).html(html);
+
     }
         
     function openForm(j,k,l) {      
@@ -410,8 +451,7 @@
 
   }
     
-
-   (function ($) {
+    (function ($) {
     $.fn.serializeFormJSON = function () {
 
         var o = {};
