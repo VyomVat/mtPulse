@@ -39,9 +39,9 @@
                                     overflow:auto;
                                     min-width: 160px;width: 280px;
                                     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);z-index: 1;">
-            <a href="#" onclick="openForm()" >Add Diet Entry</a><br>
+<!--             <a href="#" onclick="openForm()" >Add Diet Entry</a><br>
             <a href="#" onclick="openForm()" >Diet Plan 2 (8/8/18)</a><br>
-            <a href="#" onclick="openForm()" >Diet Plan 1 (2/8/18)</a>     
+            <a href="#" onclick="openForm()" >Diet Plan 1 (2/8/18)</a>      -->
         </div>
 		  </div>
       
@@ -83,6 +83,7 @@
     
     //toggle between hiding and showing the dropdown content */
     myFunction();
+    openLoginForm();
     
     function myFunction() {
 //       alert($("#myDropdown").css('display'))
@@ -131,9 +132,11 @@
                               {"<>":"br","html":""},
                               {"<>":"button","type":"button","id":"btnSave","class":"entryBtn", "html":"Log In"},
                               {"<>":"span","id":"spnEmpty", "html":" "},
-                              {"<>":"button","type":"button","id":"btnRegister","class":"entryBtn", "html":"Register"},
+                              {"<>":"button","type":"button","id":"btnRegister","class":"entryBtn", "html":"SignUp"},
+                              //{"<>":"span","id":"spnEmpty", "html":" "},
+                              //{"<>":"button","type":"button","id":"btnClose","class":"entryBtn","html":"Cancel"},
                               {"<>":"span","id":"spnEmpty", "html":" "},
-                              {"<>":"button","type":"button","id":"btnClose","class":"entryBtn","html":"Cancel"}
+                              {"<>":"input","id":"txtStatus","name":"txtStatus","type":"text","readonly":"1","value":"", "style":"background-color:darkGrey;;border:none;width:100%" }
                             ]}
                          ],
             "defaults": [
@@ -147,11 +150,20 @@
           //Wire events
           $("#btnSave").click(function() {  
             
-            //publishForm( "Log In", formObj.length - 1, JSON.stringify(j2j($("#dForm").serializeArray())) );
+            //Validate
+            if (    $("#txtUserid").val()==null ||
+                    $("#txtUserid").val() == "" ||
+                    $("#txtPassword").val() == null ||
+                    $("#txtPassword").val() == "" )
+            {
+                $("#txtStatus").val("Please enter UserID and Password");
+                return;
+            }
             
             //Call php service to save record
             request.request.userid = $("#txtUserid").val();
             request.request.password = $("#txtPassword").val();
+            request.request.mode = "0";
             
             $.ajax({
                 url: 'http://kavach.gearhostpreview.com/login.php',
@@ -164,35 +176,38 @@
                     if (parseInt(data[0].id) > 0) {
                       $("#mtMenu").show();
                       $("#mtLogin").hide();
+                      //console.log(data[0].profile);
                       buildIconBar("myDropdown",data[0].profile)
                       displayStatus("Logged In");
+                      $("#form").css('display','none');          
                     }
                     else {
-                      $("#mtMenu").hide();
-                      $("#mtLogin").show();  
-                      displayStatus("Wrong Id or Password")
+                      $("#txtStatus").val("Wrong UserID or Password");
                     }
                 },
                 error: function( jqXhr, textStatus, errorThrown ){
                     console.log( errorThrown );
-                    $("#mtMenu").hide();
-                    $("#mtLogin").show();
-                    displayStatus("Error Logging In")
+                      $("#txtStatus").val("Error! Cannot Log in.");
                 }
             });
-
-            //e.preventDefault();
-            $("#form").css('display','none');
-           
           }); 
           
-          $("#btnClose").click(function() {  $("#form").css('display','none');  }); 
+          
+          //$("#btnClose").click(function() {  $("#form").css('display','none');  }); 
           
           //Wire events
           $("#btnRegister").click(function() {  
             
-            //publishForm( "Log In", formObj.length - 1, JSON.stringify(j2j($("#dForm").serializeArray())) );
-            
+            //Validate
+            if (    $("#txtUserid").val()==null ||
+                    $("#txtUserid").val() == "" ||
+                    $("#txtPassword").val() == null ||
+                    $("#txtPassword").val() == "" )
+            {
+                $("#txtStatus").val("Please enter UserID and Password");
+                return;
+            }
+           
             //Call php service to save record
             request.request.userid = $("#txtUserid").val();
             request.request.password = $("#txtPassword").val();
@@ -206,29 +221,19 @@
                 data:  { req:JSON.stringify(request) },
                 success: function( data, textStatus, jQxhr ){
                     console.log( data);
-                    if (parseInt(data[0].id) > 0) {
-                      $("#mtMenu").show();
-                      $("#mtLogin").hide();
-                      buildIconBar("myDropdown",data[0].profile)
-                      displayStatus("Registered");
+                    if (parseInt(data[0].id) > 0) {                    
+                      $("#txtStatus").val("Successfully Registered, please log in");
                     }
                     else {
-                      $("#mtMenu").hide();
-                      $("#mtLogin").show();  
-                      displayStatus("Error registering")
+                        $("#txtStatus").val("Error Registering, User exists");
                     }
                 },
                 error: function( jqXhr, textStatus, errorThrown ){
                     console.log( errorThrown );
-                    $("#mtMenu").hide();
-                    $("#mtLogin").show();
-                    displayStatus("Error Logging In")
+                       $("#txtStatus").val("Error, Cannot Regster.");
                 }
             });
 
-            //e.preventDefault();
-            $("#form").css('display','none');
-           
           }); 
          
           //Make form visible
