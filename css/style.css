@@ -7,12 +7,12 @@ body {
     padding: 0;
     margin: 1;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Roboto Light", "Segoe UI Web Light", "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", Helvetica, Arial, sans-serif; 
-    background: #f9f9f9;
+    background: darkgray;
     color: #333;
 }
 header {
     height: 58px;
-    background: #fff;
+    background: darkgray;
     border-top: 4px solid #ce1126;
     border-bottom-color: #eee;
 }
@@ -41,7 +41,7 @@ button {
     background: #e6e6e6;
     text-shadow: 0 1px 0 #f3f3f3;
 /*     margin: .5em 0 2em 0; */
-    width: 50px;
+    width: 100px;
 /*     width: 100%; */
 }
 
